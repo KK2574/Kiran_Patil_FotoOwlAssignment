@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { PicsumImage } from '../types';
 import { useTheme } from '../hooks/useTheme';
 
@@ -32,11 +31,9 @@ export default function ImageCard({ image, isFavorite, onPress, onToggleFavorite
           hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           style={styles.heartButton}
         >
-          <Ionicons
-            name={isFavorite ? 'heart' : 'heart-outline'}
-            size={22}
-            color={isFavorite ? '#ef4444' : colors.placeholder}
-          />
+          <Text style={[styles.heartText, { color: isFavorite ? '#ef4444' : colors.placeholder }]}>
+            {isFavorite ? '♥' : '♡'}
+          </Text>
         </TouchableOpacity>
       </View>
     </TouchableOpacity>
@@ -65,4 +62,5 @@ const styles = StyleSheet.create({
   author: { fontSize: 13, fontWeight: '600', color: '#111827' },
   idText: { fontSize: 11, color: '#6b7280', marginTop: 2 },
   heartButton: { marginLeft: 6, padding: 2 },
+  heartText: { fontSize: 22 },
 });
