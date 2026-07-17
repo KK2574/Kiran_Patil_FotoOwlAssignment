@@ -25,6 +25,7 @@
         "android.permission.READ_MEDIA_AUDIO"
       ]
     },
+    "newArchEnabled": false,
     "plugins": [
       [
         "expo-media-library",
