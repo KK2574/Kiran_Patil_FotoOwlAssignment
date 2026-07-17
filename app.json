@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "FotoOwl RN Assignment",
+    "slug": "fotoowl-rn-assignment",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kiranpatil.fotoowlassignment"
+    },
+    "android": {
+      "package": "com.kiranpatil.fotoowlassignment",
+      "permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"]
+    },
+    "plugins": [
+      [
+        "expo-media-library",
+        {
+          "photosPermission": "Allow $(PRODUCT_NAME) to save downloaded images to your gallery.",
+          "savePhotosPermission": "Allow $(PRODUCT_NAME) to save downloaded images to your gallery."
+        }
+      ]
+    ]
+  }
+}
