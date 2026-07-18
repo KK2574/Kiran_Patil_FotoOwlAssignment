@@ -1,56 +1,72 @@
-# Welcome to your Expo app 👋
+# FotoOwl RN Assignment
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native (Expo) app implementing user authentication, a searchable/filterable image gallery, favorites, image details with gallery download, and profile management — built for the FotoOwl React Native Mobile Engineer Intern assignment.
 
-## Get started
+## Tech Stack
 
-1. Install dependencies
+- React Native + Expo (SDK 54)
+- TypeScript
+- React Navigation (native-stack + bottom-tabs)
+- Zustand (with AsyncStorage persistence middleware) for centralized state management
+- AsyncStorage for local data persistence (users, session, favorites, theme)
+- `expo-media-library` + `expo-file-system` for downloading images to the device gallery
+- `@react-native-picker/picker` for the City dropdown
 
-   ```bash
-   npm install
-   ```
+## Features Implemented
 
-2. Start the app
+- **Registration** — full name, email, gender (radio), mobile, address, city (dropdown), password/confirm, with full client-side validation (required fields, email format, 10-digit mobile, 6+ char password, password match).
+- **Login** — validated against locally stored registered users.
+- **Session persistence** — login state persists across app restarts via Zustand + AsyncStorage.
+- **Home / Image Gallery**
+  - Fetches from `https://picsum.photos/v2/list`, rendered with `FlatList`.
+  - Loading state, pull-to-refresh, and graceful error handling with a retry banner.
+  - **Debounced search** (400ms) by author name, case-insensitive.
+  - **Filter** by author name: All / A–M / N–Z, combined seamlessly with search.
+  - **Infinite scroll pagination**, with a ref-based in-flight guard to prevent duplicate concurrent fetches (also protects pull-to-refresh from firing overlapping requests).
+- **Favorites** — add/remove from the gallery or the dedicated Favorites screen, in-favorites search, persisted across restarts.
+- **Image Details / Full-Screen Viewer** — full-size image, author, image ID, and a Download button that saves the image to the device gallery (via `expo-media-library`), with permission handling.
+- **Profile** — view and edit stored profile fields; changes save and reflect immediately across the app.
+- **Logout**.
+- **Bonus:** Dark mode (toggleable, theme persisted), debounced search, and custom hooks (`useImageGallery` for fetch/pagination/refresh logic, `useDebounce`, `useTheme`).
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Project Setup
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Scan the QR code with Expo Go, or run on an emulator/simulator. Note: the gallery-download feature depends on `expo-media-library`, a native module not included in the standard Expo Go client — to test that specific feature you'll need a development build:
 
-### Other setup steps
+```bash
+eas build --profile development --platform android
+npx expo start --dev-client
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+To produce a release APK:
 
-## Learn more
+```bash
+eas build --platform android --profile preview
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Folder Structure
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+src/
+  app/            Root layout / entry (Expo Router entry files)
+  components/     Reusable UI components (FormInput, RadioGroup, ImageCard)
+  hooks/          Custom hooks (useImageGallery, useDebounce, useTheme)
+  navigation/      Bottom tab navigator setup
+  screens/        Screen components (Login, Register, Home, Favorites, ImageDetails, Profile)
+  store/          Zustand stores (auth, favorites, theme) with AsyncStorage persistence
+  theme/          Light/dark color palettes
+  types/          Shared TypeScript types
+  utils/          Validation helpers
+```
 
-## Join the community
+## Assumptions
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- Cities available in the dropdown are a fixed list (Pune, Mumbai, Bengaluru, Delhi, Hyderabad, Chennai, Kolkata) rather than fetched from an external API, since the assignment doesn't specify a source.
+- "Filter by Author Name A–M / N–Z" is applied against the first letter of the author's name, case-insensitively.
+- Since the Picsum API doesn't support server-side author search/filtering, search and filter are applied client-side against currently loaded pages; infinite scroll pagination is paused while a search query or non-"All" filter is active, to avoid mixing paginated raw results with filtered views.
+- User accounts and profile data are stored locally only (AsyncStorage) — there is no backend; "registration" and "login" are simulated against locally persisted user records.
