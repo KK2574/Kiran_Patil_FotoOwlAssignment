@@ -31,7 +31,7 @@ const FILTERS: { label: string; value: FilterOption }[] = [
 ];
 
 export default function HomeScreen({ navigation }: Props) {
-  const { images, loading, refreshing, error, loadInitial, loadMore, refresh } = useImageGallery();
+  const { images, loading, refreshing, error, loadInitial, loadMore, refresh, retry } = useImageGallery();
   const { toggleFavorite, isFavorite } = useFavoritesStore();
   const { colors } = useTheme();
 
@@ -107,7 +107,7 @@ export default function HomeScreen({ navigation }: Props) {
       {error && (
         <View style={styles.errorBanner}>
           <Text style={styles.errorBannerText}>{error}</Text>
-          <TouchableOpacity onPress={loadInitial}>
+          <TouchableOpacity onPress={images.length === 0 ? loadInitial : retry}>
             <Text style={styles.retryText}>Retry</Text>
           </TouchableOpacity>
         </View>
