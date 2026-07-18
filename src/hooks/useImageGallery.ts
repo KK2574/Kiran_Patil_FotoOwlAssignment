@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { PicsumImage } from '../types';
 
-const LIMIT = 20;
+const LIMIT = 50;
 const BASE_URL = 'https://picsum.photos/v2/list';
 
 export function useImageGallery() {
