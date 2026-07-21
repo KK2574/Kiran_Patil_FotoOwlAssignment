@@ -27,7 +27,7 @@ A React Native (Expo) app implementing user authentication, a searchable/filtera
 - **Image Details / Full-Screen Viewer** — full-size image, author, image ID, and a Download button that saves the image to the device gallery (via `expo-media-library`), with permission handling.
 - **Profile** — view and edit stored profile fields; changes save and reflect immediately across the app.
 - **Logout**.
-- **Bonus:** Dark mode (toggleable, theme persisted), debounced search, and custom hooks (`useImageGallery` for fetch/pagination/refresh logic, `useDebounce`, `useTheme`).
+- **Bonus:** Share Image, Dark mode (toggleable, theme persisted), debounced search, and custom hooks (`useImageGallery` for fetch/pagination/refresh logic, `useDebounce`, `useTheme`).
 
 ## Project Setup
 
